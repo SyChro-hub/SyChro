@@ -12,13 +12,20 @@
     /* Override validi solo per questa home page */
     .home-logo {
         display: block;
-        height: 160px; /* 40px della piattaforma +300% */
+        height: 100px;
+        max-width: 80vw;
         width: auto;
         margin: 0 auto 1.5rem;
     }
     main h1,
     main p {
         max-width: 1100px;
+    }
+    @media (max-width: 650px) {
+        .home-logo {
+            height: 72px;
+            margin-bottom: 1rem;
+        }
     }
 </style>
 </head>
@@ -28,14 +35,14 @@
     <img class="home-logo" src="logo.svg" alt="SyChro">
     <h1>The Steps Towards a New Thinking Approach</h1>
     <p>A journey through the evolution of the systemic approach in sustainability and design</p>
-    <p>SyChro is a multilevel timeline that lets you explore all the factors historically contributing to a holistic, multidisciplinary, <br>
-        and systemic approach to thinking, across environmental, social, economic, educational, and philosophical issues. <br>
-        The more you explore, the more your perspective transforms.</p>
+    <p>SyChro is a multilevel timeline allows you to explore all the factors that have historically contributed to the emergence of a holistic, multidisciplinary, and systemic approach to thinking, touching on environmental, social, economic, educational, and philosophical issues.
+    The more you learn, the more you'll see the world from a new perspective!</p>
 
-    <div class="cta-group">
-        <a class="btn" href="explore.html">Explore SyChro</a>
+    <div class="cta-group cta-home">
+        <a class="btn btn-primary" href="explore.html">explore SyChro</a>
+        <a class="btn" href="about.html">About</a>
         <a class="btn" href="https://docs.google.com/forms/d/e/1FAIpQLSeUoOQV_mKtxhJ3AtIlNVkIJlToYJGXlte8i6li09yvkemw2Q/viewform?usp=header" target="_blank" rel="noopener">Contribute to the Database</a>
-        <a class="btn" href="contacts.html">Contacts</a>
+        <a class="btn" href="contacts.html">contacts</a>
     </div>
 </main>
 
