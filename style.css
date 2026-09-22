@@ -2,6 +2,7 @@
 
 html {
     -webkit-text-size-adjust: 100%;
+    background: #1A1A1A; /* fondo di sicurezza sotto il gradiente */
 }
 
 body {
@@ -11,7 +12,6 @@ body {
     display: flex;
     flex-direction: column;
     background: linear-gradient(135deg, #1A1A1A 0%, #2A2A2A 100%);
-    background-attachment: fixed;
     color: #FFFFFF;
     font-family: 'Plus Jakarta Sans', sans-serif;
 }
@@ -232,4 +232,201 @@ main p {
         align-items: center;
         gap: 1rem;
     }
+}
+
+/* ---------- Pagina About ---------- */
+
+.about-wrap {
+    width: 100%;
+    max-width: 720px;
+    text-align: left;
+}
+
+.about-wrap h1 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.about-wrap h2 {
+    font-family: 'Darker Grotesque', sans-serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #BF953F;
+    line-height: 1.1;
+    margin: 0 0 1rem;
+}
+
+/* Testo introduttivo: corsivo grassetto, più grande */
+.about-wrap .lead {
+    font-family: 'Lora', Georgia, serif;
+    font-style: italic;
+    font-weight: 600;
+    font-size: 1.3rem;
+    line-height: 1.55;
+    opacity: 1;
+    max-width: none;
+    color: #FFFFFF;
+    margin: 0 0 1.5rem;
+    padding-left: 1.25rem;
+    border-left: 2px solid #BF953F;
+}
+
+/* Testo di dettaglio: light, più piccolo */
+.about-wrap .details {
+    font-weight: 300;
+    font-size: 0.95rem;
+    line-height: 1.75;
+    opacity: 0.8;
+    max-width: none;
+    margin: 0 0 3rem;
+}
+
+.about-section {
+    margin-bottom: 3rem;
+}
+
+/* News: immagine di copertina + testo */
+.news-card {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    padding: 1.25rem;
+    border: 1px solid rgba(191, 149, 63, 0.45);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.news-card.no-image {
+    grid-template-columns: 1fr;
+}
+
+.news-card img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+}
+
+.news-card p {
+    max-width: none;
+    margin: 0 0 0.9rem;
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.news-card a {
+    color: #BF953F;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.news-card a:hover {
+    color: #FFFFFF;
+}
+
+.news-card .citation {
+    font-size: 0.85rem;
+    font-weight: 300;
+    line-height: 1.6;
+    opacity: 0.75;
+    margin: 0;
+    padding-top: 0.9rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Newsletter */
+.newsletter p {
+    max-width: none;
+    margin: 0 0 1rem;
+    font-size: 1rem;
+}
+
+.newsletter-form {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.newsletter-form input[type="email"] {
+    flex: 1;
+    min-width: 0;
+    min-height: 48px;
+    padding: 0.6rem 0.9rem;
+    border-radius: 8px;
+    border: 1px solid #555555;
+    background: rgba(255, 255, 255, 0.05);
+    color: #FFFFFF;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1rem;
+}
+
+.newsletter-form input[type="email"]::placeholder {
+    color: #8A8A8A;
+}
+
+.newsletter-form input[type="email"]:focus {
+    outline: none;
+    border-color: #BF953F;
+}
+
+.newsletter-form .btn-primary {
+    font-size: 1rem;
+    min-height: 48px;
+    padding: 0.6rem 1.5rem;
+    width: auto;
+}
+
+.newsletter .note {
+    font-size: 0.8rem;
+    font-weight: 300;
+    opacity: 0.6;
+    margin: 0.75rem 0 0;
+}
+
+.newsletter .status {
+    font-size: 0.95rem;
+    margin: 0.75rem 0 0;
+    min-height: 1.4em;
+}
+
+.newsletter .status:empty { display: none; }
+.newsletter .status.ok { color: #BF953F; }
+.newsletter .status.error { color: #E57373; }
+
+.about-back {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+@media (max-width: 650px) {
+    .about-wrap .lead {
+        font-size: 1.15rem;
+        padding-left: 1rem;
+    }
+
+    .news-card {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .newsletter-form {
+        flex-direction: column;
+    }
+
+    .newsletter-form .btn-primary {
+        width: 100%;
+    }
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }

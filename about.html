@@ -6,8 +6,8 @@
 <title>SyChro - About</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@400;700&family=Plus+Jakarta+Sans:wght@400;700&family=Lora:ital@1" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=3">
+<link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;700&family=Lora:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 
@@ -16,13 +16,96 @@
 </header>
 
 <main>
-    <h1>About SyChro</h1>
-    <p>[Placeholder] Here you will find the story behind SyChro – Collective Systemic Chronography: why the project was born, how the timeline is built, and who is contributing to it.</p>
+    <div class="about-wrap">
+        <h1>About SyChro</h1>
 
-    <div class="cta-group">
-        <a class="btn" href="index.html">Back to Home</a>
+        <p class="lead">SyChro is a multilevel timeline that allows you to explore all the factors that have historically contributed to the emergence of a holistic, multidisciplinary, and systemic approach to thinking, touching on environmental, social, economic, educational, and philosophical issues. The more you learn, the more you'll see the world from a new perspective!</p>
+
+        <p class="details">SyChro began as research by Serena Treppiedi and Alessandra Savina into the history of systemic disciplines, a body of knowledge that is vast, scattered across fields and institutions, and hard to grasp as a whole. The platform gathers a curated database of milestones in Systems Thinking, System Dynamics, Systemic Design, and Sustainability, and arranges them on five parallel timelines (general history, institutions, documentation, events, and definitions) so that developments across different dimensions can be read side by side. It is designed for researchers, educators, professionals, and students. Its aim is to offer the systemic community a shared, open reference point that encourages exchange across disciplines and supports a shift from linear thinking toward a systemic, collaborative, and regenerative worldview. Future developments include detailed entry pages with multimedia and external links, thematic filters, visible connections between milestones, a mobile version, and user accounts for personal collections and verified contributions.</p>
+
+        <section class="about-section" aria-labelledby="news-title">
+            <h2 id="news-title">News</h2>
+            <article class="news-card">
+                <a href="https://www.rsd15.org/" target="_blank" rel="noopener">
+                    <img src="rsd15-cover.png"
+                         alt="RSD15 – Relating Systems Thinking and Design Symposium 2026"
+                         onerror="if(!this.dataset.fallback){this.dataset.fallback=1;this.src='https://static.wixstatic.com/media/414062_d2495665d3ef4df69862195a636331e4~mv2.png';}else{this.closest('a').remove();document.querySelector('.news-card').classList.add('no-image');}">
+                </a>
+                <div>
+                    <p>SyChro will be officially presented at <a href="https://www.rsd15.org/" target="_blank" rel="noopener">RSD15 – Relating Systems Thinking and Design Symposium 2026</a>, “Shades of Systemic Design”, taking place 13–16 October 2026 at Castello del Valentino, Turin, Italy.</p>
+                    <p class="citation">Treppiedi, S., &amp; Savina, A. (2026). A Multilayer Systemic Timeline for Navigating Complexity and Enhancing Collective Knowledge in Systemic Thinking and Design. <em>Proceedings of Relating Systems Thinking and Design, RSD15</em>.</p>
+                </div>
+            </article>
+        </section>
+
+        <section class="about-section newsletter" id="newsletter" aria-labelledby="newsletter-title" hidden>
+            <h2 id="newsletter-title">Stay updated</h2>
+            <p>Get news about SyChro's launch and future developments.</p>
+            <form class="newsletter-form" id="newsletter-form" novalidate>
+                <label for="newsletter-email" class="sr-only">Your email</label>
+                <input type="email" id="newsletter-email" name="email" placeholder="name@example.com" autocomplete="email" required>
+                <button type="submit" class="btn btn-primary">Subscribe</button>
+            </form>
+            <p class="status" id="newsletter-status" role="status" aria-live="polite"></p>
+            <p class="note">We'll only use your email to send updates about SyChro. You can unsubscribe at any time.</p>
+        </section>
+
+        <div class="cta-group about-back">
+            <a class="btn" href="index.html">Back to Home</a>
+        </div>
     </div>
 </main>
+
+<script>
+/* ===== Newsletter: collega un Google Form =====
+   1. Crea un Google Form con una sola domanda "Email" (risposta breve).
+   2. Incolla qui sotto l'ID del form e l'ID del campo (vedi istruzioni).
+   Finché i due valori sono vuoti, la sezione "Stay updated" resta nascosta. */
+const NEWSLETTER = {
+    formId:  '',   // es. '1FAIpQLSf...'  (la parte tra /d/e/ e /viewform)
+    entryId: ''    // es. 'entry.123456789'
+};
+
+(function () {
+    const section = document.getElementById('newsletter');
+    if (!NEWSLETTER.formId || !NEWSLETTER.entryId) return;
+    section.hidden = false;
+
+    const form = document.getElementById('newsletter-form');
+    const input = document.getElementById('newsletter-email');
+    const status = document.getElementById('newsletter-status');
+    const button = form.querySelector('button');
+
+    input.addEventListener('input', () => { status.textContent = ''; status.className = 'status'; });
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = input.value.trim();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            status.textContent = 'Enter a valid email address.';
+            status.className = 'status error';
+            input.focus();
+            return;
+        }
+        button.disabled = true;
+        const data = new FormData();
+        data.append(NEWSLETTER.entryId, email);
+        try {
+            await fetch('https://docs.google.com/forms/d/e/' + NEWSLETTER.formId + '/formResponse', {
+                method: 'POST', mode: 'no-cors', body: data
+            });
+            form.reset();
+            status.textContent = "Thanks! You're on the list.";
+            status.className = 'status ok';
+        } catch (err) {
+            status.textContent = "Couldn't subscribe right now. Try again later.";
+            status.className = 'status error';
+        } finally {
+            button.disabled = false;
+        }
+    });
+})();
+</script>
 
 </body>
 </html>
