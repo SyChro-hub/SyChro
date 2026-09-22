@@ -102,18 +102,19 @@ main p {
     outline-offset: 3px;
 }
 
-/* Pulsante principale: pieno in oro, prima scelta */
+/* Pulsante principale: prima scelta, oro traslucido come il selettore lingua della piattaforma */
 .btn-primary {
-    background: #BF953F;
-    color: #1A1A1A;
-    font-size: 1.15rem;
+    background: rgba(191, 149, 63, 0.25);
+    color: #FFFFFF;
+    border: 1.5px solid #BF953F;
+    font-size: 1.2rem;
     padding: 0.85rem 1.5rem;
     min-height: 56px;
 }
 
 .btn-primary:hover {
-    background: #CFA650;
-    box-shadow: 0 6px 18px rgba(189, 156, 89, 0.4);
+    background: rgba(191, 149, 63, 0.38);
+    box-shadow: 0 6px 18px rgba(189, 156, 89, 0.35);
 }
 
 /* CTA della home: principale sopra, secondarie affiancate sotto */
