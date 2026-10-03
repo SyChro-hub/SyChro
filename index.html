@@ -230,7 +230,7 @@
 </main>
 
 <dialog class="install-sheet" id="install-sheet" aria-labelledby="install-title">
-    <img src="apple-touch-icon.png" alt="" width="56" height="56">
+    <img src="apple-touch-icon.png" alt="" width="56" height="56" onerror="this.onerror=null;this.src='favicon.svg';">
     <h2 id="install-title">Add SyChro to your home screen</h2>
     <ol id="install-steps"></ol>
     <form method="dialog"><button class="btn">Got it</button></form>
@@ -341,8 +341,8 @@
                 '<li>Tap <strong>Add</strong>. SyChro will appear among your apps.</li>';
         } else {
             steps.innerHTML =
-                '<li>Open your browser menu <strong>⋮</strong>.</li>' +
-                '<li>Tap <strong>Add to Home screen</strong> or <strong>Install app</strong>.</li>' +
+                '<li>Open your browser menu (<strong>⋮</strong> or <strong>≡</strong>).</li>' +
+                '<li>Tap <strong>Add to Home screen</strong>, <strong>Add to phone</strong> or <strong>Install app</strong>.</li>' +
                 '<li>Confirm. SyChro will appear among your apps.</li>';
         }
         if (typeof sheet.showModal === 'function') {
