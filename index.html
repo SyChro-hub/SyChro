@@ -4,6 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SyChro</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#1A1A1A">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SyChro">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Darker+Grotesque:wght@400;700&family=Plus+Jakarta+Sans:wght@400;700&family=Lora:ital@1" rel="stylesheet">
@@ -23,6 +32,11 @@
     }
     .home-hero {
         display: contents; /* su desktop non cambia nulla */
+    }
+
+    .install-btn,
+    .install-sheet {
+        display: none; /* mai visibili su desktop */
     }
 
     /* ===== Solo mobile: home riorganizzata ===== */
@@ -108,6 +122,86 @@
             color: #BF953F;
             border-bottom-color: rgba(191, 149, 63, 0.3);
         }
+
+        /* Aggiungi alla schermata Home */
+        .install-btn:not([hidden]) {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            padding: 0.6rem 0.9rem;
+            min-height: 44px;
+            background: none;
+            border: none;
+            color: #BF953F;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .install-btn:focus-visible {
+            outline: 2px solid #BF953F;
+            outline-offset: 2px;
+            border-radius: 6px;
+        }
+
+        .install-sheet[open] {
+            display: block;
+            position: fixed;
+            inset: auto 0 0 0;
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 1.75rem 1.5rem calc(1.5rem + env(safe-area-inset-bottom));
+            border: none;
+            border-top: 1px solid rgba(191, 149, 63, 0.5);
+            border-radius: 16px 16px 0 0;
+            background: #262626;
+            color: #FFFFFF;
+            text-align: center;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .install-sheet::backdrop {
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .install-sheet img {
+            border-radius: 12px;
+        }
+
+        .install-sheet h2 {
+            font-family: 'Darker Grotesque', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #BF953F;
+            margin: 0.75rem 0 1rem;
+            line-height: 1.1;
+        }
+
+        .install-sheet ol {
+            text-align: left;
+            margin: 0 auto 1.5rem;
+            padding-left: 1.4rem;
+            max-width: 22rem;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .install-sheet li + li {
+            margin-top: 0.6rem;
+        }
+
+        .install-sheet .share-icon {
+            display: inline-block;
+            vertical-align: -3px;
+            color: #BF953F;
+        }
+
+        .install-sheet .btn {
+            width: 100%;
+            min-height: 48px;
+        }
     }
 </style>
 </head>
@@ -128,7 +222,19 @@
             <a href="contacts.html">Contacts</a>
         </nav>
     </div>
+
+    <button type="button" class="install-btn" id="install-btn" hidden>
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8.5v7M8.5 12h7"/></svg>
+        Add SyChro to your home screen
+    </button>
 </main>
+
+<dialog class="install-sheet" id="install-sheet" aria-labelledby="install-title">
+    <img src="apple-touch-icon.png" alt="" width="56" height="56">
+    <h2 id="install-title">Add SyChro to your home screen</h2>
+    <ol id="install-steps"></ol>
+    <form method="dialog"><button class="btn">Got it</button></form>
+</dialog>
 
 <script>
 /* ===== Explore SyChro: controllo di disponibilità della timeline =====
@@ -180,6 +286,83 @@
         btn.removeAttribute('aria-busy');
         btn.classList.remove('is-loading');
     });
+})();
+</script>
+
+<script>
+/* ===== Aggiungi alla schermata Home (Android + iPhone/iPad) =====
+   - Android/Chrome: apre la richiesta di installazione nativa.
+   - iPhone/iPad: Apple non permette di farlo in automatico, quindi mostriamo le istruzioni.
+   - Il pulsante non compare se il sito è già aperto dall'icona o su desktop. */
+(function () {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+
+    const btn = document.getElementById('install-btn');
+    const sheet = document.getElementById('install-sheet');
+    const steps = document.getElementById('install-steps');
+
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+    const ua = navigator.userAgent;
+    const isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isAndroid = /Android/.test(ua);
+    const isMobile = window.matchMedia('(max-width: 650px)').matches || isIOS || isAndroid;
+
+    if (isStandalone || !isMobile) return;
+
+    const SHARE_ICON = '<svg class="share-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-label="Share"><path d="M12 3v12M8 7l4-4 4 4"/><path d="M6 11v8a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-8"/></svg>';
+
+    let deferredPrompt = null;
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        btn.hidden = false;
+    });
+
+    window.addEventListener('appinstalled', () => {
+        btn.hidden = true;
+        deferredPrompt = null;
+    });
+
+    if (isIOS) {
+        btn.hidden = false;
+    } else if (isAndroid) {
+        // Browser Android che non supportano l'installazione diretta (es. Firefox): mostra comunque il pulsante con le istruzioni
+        setTimeout(() => { btn.hidden = false; }, 1500);
+    }
+
+    function showInstructions() {
+        if (isIOS) {
+            steps.innerHTML =
+                '<li>Tap the Share button ' + SHARE_ICON + ' in your browser bar.</li>' +
+                '<li>Scroll down and tap <strong>Add to Home Screen</strong>.</li>' +
+                '<li>Tap <strong>Add</strong>. SyChro will appear among your apps.</li>';
+        } else {
+            steps.innerHTML =
+                '<li>Open your browser menu <strong>⋮</strong>.</li>' +
+                '<li>Tap <strong>Add to Home screen</strong> or <strong>Install app</strong>.</li>' +
+                '<li>Confirm. SyChro will appear among your apps.</li>';
+        }
+        if (typeof sheet.showModal === 'function') {
+            sheet.showModal();
+        }
+    }
+
+    btn.addEventListener('click', async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const choice = await deferredPrompt.userChoice;
+            deferredPrompt = null;
+            if (choice.outcome === 'accepted') btn.hidden = true;
+        } else {
+            showInstructions();
+        }
+    });
+
+    // Tocco fuori dalla finestra: la chiude
+    sheet.addEventListener('click', (e) => { if (e.target === sheet) sheet.close(); });
 })();
 </script>
 
